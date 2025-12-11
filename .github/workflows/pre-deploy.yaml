@@ -45,4 +45,4 @@ jobs:
 
     - name: run pytest
       run: |
-        pytest --cov=dags/src dags/tests -k "not test_clickhouse_interface.py"
+        pytest --cov=dags/src dags/tests -k "not test_clickhouse_ingestion.py"
