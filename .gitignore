@@ -1,0 +1,14 @@
+.vscode/
+.DS_Store
+.pytest_cache/
+__pycache__/
+*.pyc
+.env
+.idea/
+*.log
+coverage/
+logs/
+.ruff_cache
+output/spark/
+.coverage
+coverage.xml

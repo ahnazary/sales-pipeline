@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  airflow:
+    image: apache/airflow:2.10.2-python3.11
+    container_name: airflow-standalone
+    restart: unless-stopped
+    environment:
+      # Create default admin user on first run
+      - _AIRFLOW_WWW_USER_USERNAME=admin
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+      - AIRFLOW__CORE__DEFAULT_TIMEZONE=Europe/Berlin
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./input:/opt/airflow/input
+      - ./requirements.txt:/requirements.txt
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "pip install --no-cache-dir -r /requirements.txt &&
+               airflow db migrate &&
+               airflow standalone"
+
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    container_name: clickhouse-standalone
+    restart: unless-stopped
+    environment:
+      - CLICKHOUSE_USER=admin
+      - CLICKHOUSE_PASSWORD=admin
+      - CLICKHOUSE_DB=default
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
